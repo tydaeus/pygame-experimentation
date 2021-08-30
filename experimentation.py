@@ -33,38 +33,19 @@ screen.blit(squareSurface, squareSurface.get_rect())
 testSymbolSurface = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
 testSymbolPxArray = pygame.PixelArray(testSymbolSurface)
 
-# make the whole thing clear
-testSymbolPxArray[:,:] = c
+testSymbolPxArray[:,0:1] = [c, r, r, r, r, r, r, r, r, c]
+testSymbolPxArray[:,1:2] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,2:3] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,3:4] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,4:5] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,5:6] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,6:7] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,7:8] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,8:9] = [r, c, c, c, c, c, c, c, c, r]
+testSymbolPxArray[:,9:10] = [c, r, r, r, r, r, r, r, r, c]
 
-# first column red
-testSymbolPxArray[0:1,:] = r
-# last column red
-testSymbolPxArray[9:,:] = r
-
-#first row red
-testSymbolPxArray[:,0:1] = r
-# last row red
-testSymbolPxArray[:,9:] = r
 print("testSymbolPxArray:")
 print(testSymbolPxArray)
-
-# testSymbolArr = np.asarray([
-#     [c, r, r, r, r, r, r, r, r, c],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [r, c, c, c, c, c, c, c, c, r],
-#     [c, r, r, r, r, r, r, r, r, c]
-# ])
-# print("testSymbolArr:")
-# print(testSymbolArr)
-print("testSymbolPxArray:")
-print(testSymbolPxArray)
-# testSymbolSurface = surfarray.make_surface(testSymbolArr)
 del testSymbolPxArray
 screen.blit(testSymbolSurface, (120, 120))
 
@@ -76,5 +57,5 @@ while True:
     # update states
 
     pygame.display.flip()
-    # Fix: delay between draws (otherwise too fast)
+    # delay between draws
     clock.tick(60)
