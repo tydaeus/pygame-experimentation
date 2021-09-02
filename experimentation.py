@@ -22,8 +22,6 @@ white = 255, 255, 255
 screen.fill(white)
 
 squareArr = np.zeros((128, 128, 3), np.int32)
-print("squareArr:")
-print(squareArr)
 squareSurface = surfarray.make_surface(squareArr)
 screen.blit(squareSurface, squareSurface.get_rect())
 
