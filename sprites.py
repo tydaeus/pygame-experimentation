@@ -31,70 +31,83 @@ _default_text_palette = {
     '.': gray
 }
 
-def convert_text_image_to_colorarray(text_image, text_palette=_default_text_palette):
-    width = row = index = 0
-    output = []
+class _TextImageParser:
+    """
+    Provides state machine processing for parsing images defined as text in an ascii-image style format.
+    
+    Expects the image to be bordered, with '+' for corners, '-' for horizontal edges, and '|' for vertical edges.
+    Ignores characters outside the borders (including newlines); considers all characters inside the borders as part
+    of the image. 
+    """
 
-    # _parse* functions 
-    def _parse_prelim(c):
+    def __init__(self):
+        self._parse_done = 'DONE'
+
+    def parse(self, text_image, text_palette):
+        """
+        Converts text_image to a 2d list of Colors, using text_palette to look up character to color mapping.
+        """
+        self.width = self.row = self.index = 0
+        self.output = []
+        self.state = self._parse_prelim
+
+        while self.state != self._parse_done and self.index < len(text_image):
+            self.state(text_image[self.index], text_palette)
+            self.index += 1
+
+        if self.state != self._parse_done:
+            raise UserWarning("Malformed text image - parsing incomplete")
+
+        return self.output
+
+    # parsing states (state machine pattern)
+    def _parse_prelim(self, c, text_palette):
         "discard characters until we hit the start of the image frame ('+')"
-        nonlocal parser
         if c == '+':
-            parser = _parse_frametop
+            self.state = self._parse_frametop
 
-    def _parse_frametop(c):
+    def _parse_frametop(self, c, text_palette):
         "read in the top frame ('-' to '+')"
-        nonlocal width, parser
         if c == '-':
-            width += 1
+            self.width += 1
         elif c == '+':
-            parser = _parse_framestartedge
+            self.state = self._parse_framestartedge
         else:
             raise UserWarning(f"Illegal frame char: {c}")
 
-    def _parse_framestartedge(c):
+    def _parse_framestartedge(self, c, text_palette):
         "discard characters until we hit the left edge of the image frame ('|' or '+')"
-        nonlocal parser
         if c == '|':
-            parser = _parse_picturechar
-            output.append([])
+            self.state = self._parse_picturechar
+            self.output.append([])
         elif c == '+':
-            parser = _parse_framebottom
+            self.state = self._parse_framebottom
 
-    def _parse_picturechar(c):
+    def _parse_picturechar(self, c, text_palette):
         "convert the characters of the picture until we hit the right edge of the image frame ('|')"
-        nonlocal parser, output, row
         if c == '|':
-            parser = _parse_framestartedge
-            if len(output[row]) != width:
-                raise UserWarning(f"Text image row of length {len(output[row])} mismatch with width: {width}")
-            row += 1
+            self.state = self._parse_framestartedge
+            if len(self.output[self.row]) != self.width:
+                raise UserWarning(f"Text image row of length {len(self.output[self.row])} mismatch with width: {self.width}")
+            self.row += 1
         else:
-            output[row].append(text_palette[c])
+            self.output[self.row].append(text_palette[c])
     
-    def _parse_framebottom(c):
+    def _parse_framebottom(self, c, text_palette):
         "read in the bottom frame ('-')"
-        nonlocal parser
         if c == '-':
             pass
         elif c == '+':
-            parser = _parse_done
+            self.state = self._parse_done
         else:
             raise UserWarning(f"Illegal frame char: {c}")
         # note: currently no width check on bottom frame
 
-    _parse_done = 'DONE'
 
-    parser = _parse_prelim
+_textImageParser = _TextImageParser()
 
-    while parser != _parse_done and index < len(text_image):
-        parser(text_image[index])
-        index += 1
-
-    if parser != _parse_done:
-        raise UserWarning("Malformed text image - parsing incomplete")
-
-    return output
+def convert_text_image_to_colorarray(text_image, text_palette=_default_text_palette):
+    return _textImageParser.parse(text_image, text_palette)
 
 
 
