@@ -25,7 +25,8 @@ squareArr = np.zeros((128, 128, 3), np.int32)
 squareSurface = surfarray.make_surface(squareArr)
 screen.blit(squareSurface, squareSurface.get_rect())
 
-screen.blit(sprites.get_test_surface(), (120, 120))
+sprites.init()
+sprites.all_sprites.draw(screen)
 
 # loop
 while True:
