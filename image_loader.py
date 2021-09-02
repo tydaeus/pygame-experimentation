@@ -4,15 +4,15 @@ Takes care of finding and loading images needed for the game.
 import pygame
 
 
-r = red = pygame.Color(255, 0, 0, 255)
-g = green = pygame.Color(0, 255, 0, 255)
-b = blue = pygame.Color(0, 0, 255, 255)
-c = clear = pygame.Color(0, 0, 0, 0)
-k = black = pygame.Color(0, 0, 0, 255)
-w = white = pygame.Color(255, 255, 255, 255)
-g = gray = pygame.Color(128, 128, 128, 255)
+_red = pygame.Color(255, 0, 0, 255)
+_green = pygame.Color(0, 255, 0, 255)
+_blue = pygame.Color(0, 0, 255, 255)
+_clear = pygame.Color(0, 0, 0, 0)
+_black = pygame.Color(0, 0, 0, 255)
+_white = pygame.Color(255, 255, 255, 255)
+_gray = pygame.Color(128, 128, 128, 255)
 
-images = {
+_images = {
     'test' :
 """
 +-----------+
@@ -32,10 +32,10 @@ images = {
 }
 
 _default_text_palette = {
-    '#': blue,
-    '=': green,
-    ' ': clear,
-    '.': gray
+    '#': _blue,
+    '=': _green,
+    ' ': _clear,
+    '.': _gray
 }
 
 class _TextImageParser:
@@ -113,12 +113,12 @@ class _TextImageParser:
 
 _textImageParser = _TextImageParser()
 
-def convert_text_image_to_colorarray(text_image, text_palette=_default_text_palette):
+def _convert_text_image_to_colorarray(text_image, text_palette=_default_text_palette):
     return _textImageParser.parse(text_image, text_palette)
 
 
 
-def convert_color_array_to_surface(color_array):
+def _convert_color_array_to_surface(color_array):
     height = len(color_array)
     width = len(color_array[0])
 
@@ -141,7 +141,7 @@ def load_image(image_identifier):
     Attempts to find an image matching the specified identifier. Raises a warning if no matching image found.
     """
 
-    if image_identifier in images.keys():
-        return convert_color_array_to_surface(convert_text_image_to_colorarray(images[image_identifier]))
+    if image_identifier in _images.keys():
+        return _convert_color_array_to_surface(_convert_text_image_to_colorarray(_images[image_identifier]))
     else:
         raise UserWarning(f"Image matching '{image_identifier}' not found.")
