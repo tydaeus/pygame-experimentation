@@ -24,20 +24,6 @@ test_txt_image = """
 +-----------+
 """
 
-test_image_src = [
-    [c, r, r, r, r, r, r, r, r, r, c],
-    [r, c, c, c, c, c, c, c, c, c, r],
-    [r, c, c, c, c, r, c, c, c, c, r],
-    [r, c, c, c, c, c, r, c, c, c, r],
-    [r, c, c, c, c, c, c, r, c, c, r],
-    [r, c, r, r, r, r, r, r, r, c, r],
-    [r, c, c, c, c, c, c, r, c, c, r],
-    [r, c, c, c, c, c, r, c, c, c, r],
-    [r, c, c, c, c, r, c, c, c, c, r],
-    [r, c, c, c, c, c, c, c, c, c, r],
-    [c, b, b, b, b, b, b, b, b, b, c]
-]
-
 _default_text_palette = {
     '#': blue,
     '=': green,
