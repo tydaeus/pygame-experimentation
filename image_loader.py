@@ -12,7 +12,9 @@ k = black = pygame.Color(0, 0, 0, 255)
 w = white = pygame.Color(255, 255, 255, 255)
 g = gray = pygame.Color(128, 128, 128, 255)
 
-test_txt_image = """
+images = {
+    'test' :
+"""
 +-----------+
 | ######### |
 |#.........#|
@@ -27,6 +29,7 @@ test_txt_image = """
 | ========= |
 +-----------+
 """
+}
 
 _default_text_palette = {
     '#': blue,
@@ -132,3 +135,13 @@ def convert_color_array_to_surface(color_array):
 
     del pxarr
     return surface
+
+def load_image(image_identifier):
+    """
+    Attempts to find an image matching the specified identifier. Raises a warning if no matching image found.
+    """
+
+    if image_identifier in images.keys():
+        return convert_color_array_to_surface(convert_text_image_to_colorarray(images[image_identifier]))
+    else:
+        raise UserWarning(f"Image matching '{image_identifier}' not found.")
