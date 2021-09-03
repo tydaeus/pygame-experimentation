@@ -2,7 +2,7 @@ import pygame, image_loader
 
 
 
-class TestSprite(pygame.sprite.Sprite):
+class _TestSprite(pygame.sprite.Sprite):
     def __init__(self, *args):
         pygame.sprite.Sprite.__init__(self, *args)
         self._image_identifier = None
@@ -31,6 +31,6 @@ def init():
     global all_sprites
     all_sprites = pygame.sprite.Group()
 
-    testSprite = TestSprite(all_sprites)
+    testSprite = _TestSprite(all_sprites)
     testSprite.set_image_identifier('test')
     testSprite.rect.topleft = 120, 120
