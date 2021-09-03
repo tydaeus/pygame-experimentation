@@ -8,6 +8,7 @@ class TestSprite(pygame.sprite.Sprite):
         self._image_identifier = None
         self.image = None
         self.rect = pygame.Rect(0, 0, 0, 0)
+        self._pxsize = 100, 100
 
     def update(self):
         # placeholder
@@ -18,6 +19,11 @@ class TestSprite(pygame.sprite.Sprite):
             self._image_identifier = identifier
             self.image = image_loader.load_image(identifier)
             self.rect.size = self.image.get_width(), self.image.get_height()
+            self._scale_image()
+
+    def _scale_image(self):
+        if (self.image.get_width(), self.image.get_height()) != self._pxsize:
+            self.image = pygame.transform.scale(self.image, self._pxsize)
     
 
 
