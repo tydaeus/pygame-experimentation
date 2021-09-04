@@ -10,13 +10,13 @@ import sprites, input
 
 pygame.init()
 
-# setup
+clock = pygame.time.Clock()
+
+# setup window
 size = width, height = 1024, 768
 screen = pygame.display.set_mode(size)
 
-clock = pygame.time.Clock()
-
-# TODO: setup background
+# setup background
 black = 0, 0, 0
 white = 255, 255, 255
 
@@ -47,5 +47,5 @@ while True:
     sprites.all_sprites.draw(screen)
 
     pygame.display.flip()
-    # delay between draws
+    # delay between draws / updates
     clock.tick(60)
