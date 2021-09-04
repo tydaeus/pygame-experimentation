@@ -19,12 +19,15 @@ clock = pygame.time.Clock()
 # TODO: setup background
 black = 0, 0, 0
 white = 255, 255, 255
-screen.fill(white)
 
-squareArr = np.zeros((128, 128, 3), np.int32)
-squareSurface = surfarray.make_surface(squareArr)
-screen.blit(squareSurface, squareSurface.get_rect())
+def draw_background():
+    screen.fill(white)
 
+    squareArr = np.zeros((128, 128, 3), np.int32)
+    squareSurface = surfarray.make_surface(squareArr)
+    screen.blit(squareSurface, squareSurface.get_rect())
+
+draw_background()
 sprites.init()
 sprites.all_sprites.draw(screen)
 
@@ -40,6 +43,7 @@ while True:
     input.update()
     sprites.all_sprites.update()
 
+    draw_background()
     sprites.all_sprites.draw(screen)
 
     pygame.display.flip()
