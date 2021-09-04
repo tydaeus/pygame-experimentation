@@ -6,7 +6,7 @@ try:
 except ImportError:
     raise ImportError("NumPy and Surfarray are required.")
 
-import sprites
+import sprites, input
 
 pygame.init()
 
@@ -31,7 +31,10 @@ sprites.all_sprites.draw(screen)
 # loop
 while True:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
+        if event.type == pygame.QUIT:
+            sys.exit()
+        elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
+            input.process_event(event)
 
     # update states
 
