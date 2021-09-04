@@ -1,17 +1,17 @@
 import pygame
 
-
-MOVE_NORTH = 0b1000
-MOVE_EAST  = 0b0100
-MOVE_SOUTH = 0b0010
-MOVE_WEST  = 0b0001
-
 _key_mapping = {
-    pygame.K_UP     : MOVE_NORTH,
-    pygame.K_RIGHT  : MOVE_EAST,
-    pygame.K_DOWN   : MOVE_SOUTH,
-    pygame.K_LEFT   : MOVE_WEST
+    pygame.K_UP     : 'move_north',
+    pygame.K_RIGHT  : 'move_east',
+    pygame.K_DOWN   : 'move_south',
+    pygame.K_LEFT   : 'move_west'
 }
+
+class InputMessage:
+    move_north = False
+    move_east  = False
+    move_south = False
+    move_west  = False
 
 _subscribers = []
 
@@ -27,11 +27,11 @@ def process_event(event):
         _engaged_keys.remove(event.key)
 
 def update():
-    event_message = 0b0000
+    event_message = InputMessage()
 
     for engaged_key in _engaged_keys:
         if engaged_key in _key_mapping.keys():
-            event_message = event_message | _key_mapping[engaged_key]
+            setattr(event_message, _key_mapping[engaged_key], True)
 
     for subscriber in _subscribers:
         subscriber(event_message)

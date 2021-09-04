@@ -14,13 +14,13 @@ class _TestSprite(pygame.sprite.Sprite):
     def update(self):
         vector = [0, 0]
 
-        if self._current_message & input.MOVE_NORTH:
+        if self._current_message.move_north:
             vector[1] += -1
-        if self._current_message & input.MOVE_EAST:
+        if self._current_message.move_east:
             vector[0] += 1
-        if self._current_message & input.MOVE_SOUTH:
+        if self._current_message.move_south:
             vector[1] += 1
-        if self._current_message & input.MOVE_WEST:
+        if self._current_message.move_west:
             vector[0] += -1
 
         if vector != [0, 0]:
