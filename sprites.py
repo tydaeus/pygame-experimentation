@@ -1,4 +1,4 @@
-import pygame, image_loader
+import pygame, image_loader, input
 
 
 
@@ -9,10 +9,26 @@ class _TestSprite(pygame.sprite.Sprite):
         self.image = None
         self.rect = pygame.Rect(0, 0, 0, 0)
         self._pxsize = 100, 100
+        self._current_message = 0
 
     def update(self):
-        # placeholder
-        pass
+        vector = [0, 0]
+
+        if self._current_message & input.MOVE_NORTH:
+            print('NORTH')
+            vector[1] += -1
+        if self._current_message & input.MOVE_EAST:
+            print('EAST')
+            vector[0] += 1
+        if self._current_message & input.MOVE_SOUTH:
+            print('SOUTH')
+            vector[1] += 1
+        if self._current_message & input.MOVE_WEST:
+            print('WEST')
+            vector[0] += -1
+
+        if vector != [0, 0]:
+            self.rect.move_ip(vector[0], vector[1])
 
     def set_image_identifier(self, identifier):
         if self._image_identifier != identifier:
@@ -24,6 +40,9 @@ class _TestSprite(pygame.sprite.Sprite):
     def _scale_image(self):
         if (self.image.get_width(), self.image.get_height()) != self._pxsize:
             self.image = pygame.transform.scale(self.image, self._pxsize)
+
+    def input(self, message):
+        self._current_message = message
     
 
 
@@ -34,3 +53,5 @@ def init():
     testSprite = _TestSprite(all_sprites)
     testSprite.set_image_identifier('test')
     testSprite.rect.topleft = 120, 120
+
+    input.add_subscriber(testSprite.input)

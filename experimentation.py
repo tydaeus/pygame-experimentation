@@ -37,6 +37,10 @@ while True:
             input.process_event(event)
 
     # update states
+    input.update()
+    sprites.all_sprites.update()
+
+    sprites.all_sprites.draw(screen)
 
     pygame.display.flip()
     # delay between draws
