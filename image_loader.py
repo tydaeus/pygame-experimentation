@@ -4,40 +4,6 @@ Takes care of finding and loading images needed for the game.
 import pygame
 
 
-_red = pygame.Color(255, 0, 0, 255)
-_green = pygame.Color(0, 255, 0, 255)
-_blue = pygame.Color(0, 0, 255, 255)
-_clear = pygame.Color(0, 0, 0, 0)
-_black = pygame.Color(0, 0, 0, 255)
-_white = pygame.Color(255, 255, 255, 255)
-_gray = pygame.Color(128, 128, 128, 255)
-
-_images = {
-    'test' :
-"""
-+-----------+
-| ######### |
-|#.........#|
-|#....#....#|
-|#.....#...#|
-|#......#..#|
-|#.#######.#|
-|#......#..#|
-|#.....#...#|
-|#....#....#|
-|#.........#|
-| ========= |
-+-----------+
-"""
-}
-
-_default_text_palette = {
-    '#': _blue,
-    '=': _green,
-    ' ': _clear,
-    '.': _gray
-}
-
 class _TextImageParser:
     """
     Provides state machine processing for parsing images defined as text in an ascii-image style format.
@@ -113,6 +79,25 @@ class _TextImageParser:
 
 _textImageParser = _TextImageParser()
 
+_red = pygame.Color(255, 0, 0, 255)
+_green = pygame.Color(0, 255, 0, 255)
+_blue = pygame.Color(0, 0, 255, 255)
+_clear = pygame.Color(0, 0, 0, 0)
+_black = pygame.Color(0, 0, 0, 255)
+_white = pygame.Color(255, 255, 255, 255)
+_gray = pygame.Color(128, 128, 128, 255)
+_lightgray = pygame.Color(200, 200, 200, 255)
+_darkgray = pygame.Color(100, 100, 100, 255)
+
+_default_text_palette = {
+    '#': _black,
+    '=': _green,
+    ' ': _clear,
+    ';': _darkgray,
+    ':': _lightgray,
+    '.': _white
+}
+
 def _convert_text_image_to_colorarray(text_image, text_palette=_default_text_palette):
     return _textImageParser.parse(text_image, text_palette)
 
@@ -145,3 +130,40 @@ def load_image(image_identifier):
         return _convert_color_array_to_surface(_convert_text_image_to_colorarray(_images[image_identifier]))
     else:
         raise UserWarning(f"Image matching '{image_identifier}' not found.")
+
+
+_images = {
+    'test' :
+"""
++-----------+
+| ######### |
+|#.........#|
+|#....#....#|
+|#.....#...#|
+|#......#..#|
+|#.#######.#|
+|#......#..#|
+|#.....#...#|
+|#....#....#|
+|#.........#|
+| ######### |
++-----------+
+""",
+    'block' :
+"""
++-----------+
+| ######### |
+|#:;;;.;;:;#|
+|#;;;::;;;;#|
+|#;;;;;;:;;#|
+|#;.;;;;;;.#|
+|#;;::;;;;;#|
+|#;;;;;;;;:#|
+|#;;.;;;;.;#|
+|#;;;::;;;;#|
+|#;;;;.;;:;#|
+| ######### |
++-----------+
+"""
+}
+
