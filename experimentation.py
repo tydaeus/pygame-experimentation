@@ -1,4 +1,4 @@
-import sys, pygame
+import sys, pygame, entities
 
 try:
     import numpy as np
@@ -29,6 +29,7 @@ def draw_background():
 
 draw_background()
 sprites.init()
+entities.init()
 sprites.all_sprites.draw(screen)
 
 # loop
