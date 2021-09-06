@@ -30,7 +30,3 @@ class TestSprite(pygame.sprite.Sprite):
     def input(self, message):
         self._current_message = message
 
-
-def init():
-    global all_sprites
-    all_sprites = pygame.sprite.Group()

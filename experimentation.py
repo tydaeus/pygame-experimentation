@@ -28,9 +28,8 @@ def draw_background():
     screen.blit(squareSurface, squareSurface.get_rect())
 
 draw_background()
-sprites.init()
 entities.init()
-sprites.all_sprites.draw(screen)
+entities.entityviews.draw(screen)
 
 # loop
 while True:
@@ -42,10 +41,10 @@ while True:
 
     # update states
     input.update()
-    sprites.all_sprites.update()
+    entities.entitymodels.update()
 
     draw_background()
-    sprites.all_sprites.draw(screen)
+    entities.entityviews.draw(screen)
 
     pygame.display.flip()
     # delay between draws / updates
