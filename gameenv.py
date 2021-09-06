@@ -8,3 +8,9 @@ scalingfactor:
 """
 
 scalingfactor = 0.1
+
+def scalemodel(*args: int):
+    """
+    Returns a tuple of each arg converted from model scale to view scale.
+    """
+    return tuple(round(arg * scalingfactor) for arg in args)

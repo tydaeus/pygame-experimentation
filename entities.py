@@ -13,7 +13,7 @@ class Entity:
         self.modelsprite = None
 
     def update(self):
-        self.viewsprite.rect.center = round(self.modelsprite.rect.centerx * gameenv.scalingfactor), round(self.modelsprite.rect.centery * gameenv.scalingfactor)
+        self.viewsprite.rect.center = gameenv.scalemodel(*self.modelsprite.rect.center)
 
 
 
