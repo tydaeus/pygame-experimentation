@@ -1,4 +1,4 @@
-import pygame, sprites, input
+import pygame, sprites, input, gameenv, math
 
 class Entity:
     """
@@ -13,8 +13,7 @@ class Entity:
         self.modelsprite = None
 
     def update(self):
-        # FUTURE: add a model position to view position mapping process
-        self.viewsprite.rect = self.modelsprite.rect
+        self.viewsprite.rect.center = round(self.modelsprite.rect.centerx * gameenv.scalingfactor), round(self.modelsprite.rect.centery * gameenv.scalingfactor)
 
 
 
@@ -33,20 +32,20 @@ def init():
     playerentity.viewsprite.rect.topleft = 120, 120
 
     playerentity.modelsprite = sprites.TestSprite(entitymodels)
-    playerentity.modelsprite.rect.topleft = 120, 120
+    playerentity.modelsprite.rect.topleft = 1200, 1200
     playerentity.modelsprite.entity = playerentity
 
     def _playerupdate(self):
         vector = [0, 0]
 
         if self._current_message.move_north:
-            vector[1] += -1
+            vector[1] += -10
         if self._current_message.move_east:
-            vector[0] += 1
+            vector[0] += 10
         if self._current_message.move_south:
-            vector[1] += 1
+            vector[1] += 10
         if self._current_message.move_west:
-            vector[0] += -1
+            vector[0] += -10
 
         if vector != [0, 0]:
             self.rect.move_ip(vector[0], vector[1])
