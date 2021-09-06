@@ -2,7 +2,7 @@ import pygame, image_loader, input
 
 
 
-class _TestSprite(pygame.sprite.Sprite):
+class TestSprite(pygame.sprite.Sprite):
     def __init__(self, *args):
         pygame.sprite.Sprite.__init__(self, *args)
         self._image_identifier = None
@@ -36,7 +36,7 @@ def init():
     all_sprites = pygame.sprite.Group()
 
     # set up player
-    playerSprite = _TestSprite(all_sprites)
+    playerSprite = TestSprite(all_sprites)
     playerSprite.set_image_identifier('test')
     playerSprite.rect.topleft = 120, 120
     
@@ -60,6 +60,6 @@ def init():
     input.add_subscriber(lambda message: playerSprite.input(message))
 
     # set up block
-    blockSprite = _TestSprite(all_sprites)
+    blockSprite = TestSprite(all_sprites)
     blockSprite.set_image_identifier('block')
     blockSprite.rect.topleft = 500, 500
