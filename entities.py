@@ -4,16 +4,43 @@ class Entity:
     """
     Represents an in-game entity.
 
-    Graphical representation is managed in viewsprite (view).
-    Functional representation is managed in modelsprite (model).
+    Graphical representation is managed in _viewsprite (view).
+    Functional representation is managed in _modelsprite (model).
     """
 
     def __init__(self):
-        self.viewsprite = None
-        self.modelsprite = None
+        self._viewsprite = None
+        self._modelsprite = None
 
     def update(self):
-        self.viewsprite.rect.center = gameenv.scalemodel(*self.modelsprite.rect.center)
+        self._viewsprite.rect.center = gameenv.scalemodel(*self.center)
+
+    @property
+    def center(self):
+        'The center of the model rect.'
+        return self._modelsprite.rect.center
+
+    @center.setter
+    def center(self, centerxy):
+        self._modelsprite.rect.center = centerxy
+
+    @property
+    def x(self):
+        'X-coordinate of model center.'
+        return self._modelsprite.rect.centerx
+    
+    @x.setter
+    def x(self, value):
+        self._modelsprite.rect.centerx = value
+
+    @property
+    def y(self):
+        'Y-coordinate of model center.'
+        return self._modelsprite.rect.centery
+    
+    @y.setter
+    def y(self, value):
+        self._modelsprite.rect.centery = value
 
 
 
@@ -27,13 +54,12 @@ def init():
     # set up player
     playerentity = Entity()
 
-    playerentity.viewsprite = sprites.TestSprite(entityviews)
-    playerentity.viewsprite.set_image_identifier('test')
-    playerentity.viewsprite.rect.topleft = 120, 120
+    playerentity._viewsprite = sprites.TestSprite(entityviews)
+    playerentity._viewsprite.set_image_identifier('test')
 
-    playerentity.modelsprite = sprites.TestSprite(entitymodels)
-    playerentity.modelsprite.rect.topleft = 1200, 1200
-    playerentity.modelsprite.entity = playerentity
+    playerentity._modelsprite = sprites.TestSprite(entitymodels)
+    playerentity.center = (1200, 1200)
+    playerentity._modelsprite.entity = playerentity
 
     def _playerupdate(self):
         vector = [0, 0]
@@ -49,14 +75,15 @@ def init():
 
         if vector != [0, 0]:
             self.rect.move_ip(vector[0], vector[1])
-            self.entity.update()
+            
+        self.entity.update()
 
-    playerentity.modelsprite.update_strategy = _playerupdate
+    playerentity._modelsprite.update_strategy = _playerupdate
 
-    input.add_subscriber(lambda message: playerentity.modelsprite.input(message))
+    input.add_subscriber(lambda message: playerentity._modelsprite.input(message))
 
     # set up block
     blockentity = Entity()
-    blockentity.viewsprite = sprites.TestSprite(entityviews)
-    blockentity.viewsprite.set_image_identifier('block')
-    blockentity.viewsprite.rect.topleft = 500, 500
+    blockentity._viewsprite = sprites.TestSprite(entityviews)
+    blockentity._viewsprite.set_image_identifier('block')
+    blockentity._viewsprite.rect.topleft = 500, 500
