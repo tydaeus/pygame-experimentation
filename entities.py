@@ -110,19 +110,19 @@ def init():
     playerentity._modelsprite.update_strategy = lambda self: self.entity.update()
 
     def _playerupdate(self, message):
-        vector = [0, 0]
+        xshift = yshift = 0
 
         if message.move_north:
-            vector[1] += -10
+            yshift += -10
         if message.move_east:
-            vector[0] += 10
+            xshift += 10
         if message.move_south:
-            vector[1] += 10
+            yshift += 10
         if message.move_west:
-            vector[0] += -10
+            xshift += -10
 
-        if vector != [0, 0]:
-            self.move(vector[0], vector[1])
+        if xshift or yshift:
+            self.move(xshift, yshift)
 
     playerentity._updatestrategy = _playerupdate
 
