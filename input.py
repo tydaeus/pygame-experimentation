@@ -33,5 +33,6 @@ def update():
         if engaged_key in _key_mapping.keys():
             setattr(event_message, _key_mapping[engaged_key], True)
 
-    for subscriber in _subscribers:
-        subscriber(event_message)
+    if len(_engaged_keys) > 0:
+        for subscriber in _subscribers:
+            subscriber(event_message)
