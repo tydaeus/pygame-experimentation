@@ -42,6 +42,34 @@ class Entity:
     def y(self, value):
         self._modelsprite.rect.centery = value
 
+    @property
+    def size(self):
+        'Width and length of model.'
+        return self._modelsprite.rect.size
+
+    @size.setter
+    def size(self, value):
+        self._modelsprite.rect.size = value
+
+    @property
+    def width(self):
+        'Width of model.'
+        return self._modelsprite.rect.width
+
+    @width.setter
+    def width(self, value):
+        self._modelsprite.rect.width = value
+    
+    @property
+    def height(self):
+        'height of model.'
+        return self._modelsprite.rect.height
+
+    @height.setter
+    def height(self, value):
+        self._modelsprite.rect.height = value
+
+
 
 
 def init():
