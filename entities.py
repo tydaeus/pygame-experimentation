@@ -10,11 +10,11 @@ class Entity:
 
     def __init__(self):
         self._viewsprite = None
-        self._modelsprite = None
+        self._modelsprite = sprites.ModelSprite(self, entitymodels)
         self._messages = []
         self._updatestrategy = None
 
-    def update(self):
+    def update(self, *args, **kwargs):
         if callable(self._updatestrategy):
             for message in self._messages:
                 self._updatestrategy(self, message)
@@ -104,10 +104,7 @@ def init():
     playerentity._viewsprite = sprites.TestSprite(entityviews)
     playerentity._viewsprite.set_image_identifier('test')
 
-    playerentity._modelsprite = sprites.TestSprite(entitymodels)
     playerentity.center = (1200, 1200)
-    playerentity._modelsprite.entity = playerentity
-    playerentity._modelsprite.update_strategy = lambda self: self.entity.update()
 
     def _playerupdate(self, message):
         xshift = yshift = 0
@@ -132,4 +129,5 @@ def init():
     blockentity = Entity()
     blockentity._viewsprite = sprites.TestSprite(entityviews)
     blockentity._viewsprite.set_image_identifier('block')
-    blockentity._viewsprite.rect.topleft = 500, 500
+
+    blockentity.center = 5000, 5000

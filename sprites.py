@@ -30,3 +30,17 @@ class TestSprite(pygame.sprite.Sprite):
     def input(self, message):
         self._current_message = message
 
+
+class ModelSprite(pygame.sprite.Sprite):
+    """
+    Represents an entity's model.
+    """
+
+    def __init__(self, entity, *args):
+        pygame.sprite.Sprite.__init__(self, *args)
+        self.entity = entity
+        self.rect = pygame.Rect(0, 0, 0, 0)
+
+    def update(self, *args, **kwargs):
+        'Request that the entity handle updating the model.'
+        self.entity.update(*args, **kwargs)
