@@ -15,6 +15,7 @@ class Entity:
     def update(self):
         self._viewsprite.rect.center = gameenv.scalemodel(*self.center)
 
+
     @property
     def center(self):
         'The center of the model rect.'
@@ -23,6 +24,7 @@ class Entity:
     @center.setter
     def center(self, centerxy):
         self._modelsprite.rect.center = centerxy
+
 
     @property
     def x(self):
@@ -33,6 +35,7 @@ class Entity:
     def x(self, value):
         self._modelsprite.rect.centerx = value
 
+
     @property
     def y(self):
         'Y-coordinate of model center.'
@@ -41,6 +44,8 @@ class Entity:
     @y.setter
     def y(self, value):
         self._modelsprite.rect.centery = value
+
+
 
     @property
     def size(self):
@@ -51,6 +56,7 @@ class Entity:
     def size(self, value):
         self._modelsprite.rect.size = value
 
+
     @property
     def width(self):
         'Width of model.'
@@ -59,6 +65,7 @@ class Entity:
     @width.setter
     def width(self, value):
         self._modelsprite.rect.width = value
+    
     
     @property
     def height(self):
