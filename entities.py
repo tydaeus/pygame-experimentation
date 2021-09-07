@@ -11,10 +11,22 @@ class Entity:
     def __init__(self):
         self._viewsprite = None
         self._modelsprite = None
+        self._messages = []
+        self._updatestrategy = None
 
     def update(self):
+        if callable(self._updatestrategy):
+            for message in self._messages:
+                self._updatestrategy(self, message)
+        
+        self._messages = []
         self._viewsprite.rect.center = gameenv.scalemodel(*self.center)
 
+    def input(self, message):
+        self._messages.append(message)
+
+    def move(self, xshift, yshift):
+        self._modelsprite.rect.move_ip(xshift, yshift)
 
     @property
     def center(self):
@@ -66,7 +78,7 @@ class Entity:
     def width(self, value):
         self._modelsprite.rect.width = value
     
-    
+
     @property
     def height(self):
         'height of model.'
@@ -95,27 +107,26 @@ def init():
     playerentity._modelsprite = sprites.TestSprite(entitymodels)
     playerentity.center = (1200, 1200)
     playerentity._modelsprite.entity = playerentity
+    playerentity._modelsprite.update_strategy = lambda self: self.entity.update()
 
-    def _playerupdate(self):
+    def _playerupdate(self, message):
         vector = [0, 0]
 
-        if self._current_message.move_north:
+        if message.move_north:
             vector[1] += -10
-        if self._current_message.move_east:
+        if message.move_east:
             vector[0] += 10
-        if self._current_message.move_south:
+        if message.move_south:
             vector[1] += 10
-        if self._current_message.move_west:
+        if message.move_west:
             vector[0] += -10
 
         if vector != [0, 0]:
-            self.rect.move_ip(vector[0], vector[1])
-            
-        self.entity.update()
+            self.move(vector[0], vector[1])
 
-    playerentity._modelsprite.update_strategy = _playerupdate
+    playerentity._updatestrategy = _playerupdate
 
-    input.add_subscriber(lambda message: playerentity._modelsprite.input(message))
+    input.add_subscriber(lambda message: playerentity.input(message))
 
     # set up block
     blockentity = Entity()
