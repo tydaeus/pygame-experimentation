@@ -9,7 +9,7 @@ class Entity:
     """
 
     def __init__(self):
-        self._viewsprite = None
+        self._viewsprite = sprites.ViewSprite(entityviews)
         self._modelsprite = sprites.ModelSprite(self, entitymodels)
         self._messages = []
         self._updatestrategy = None
@@ -101,7 +101,6 @@ def init():
     # set up player
     playerentity = Entity()
 
-    playerentity._viewsprite = sprites.TestSprite(entityviews)
     playerentity._viewsprite.set_image_identifier('test')
 
     playerentity.center = (1200, 1200)
@@ -127,7 +126,6 @@ def init():
 
     # set up block
     blockentity = Entity()
-    blockentity._viewsprite = sprites.TestSprite(entityviews)
     blockentity._viewsprite.set_image_identifier('block')
 
     blockentity.center = 5000, 5000
