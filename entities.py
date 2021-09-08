@@ -146,6 +146,14 @@ def init():
         if xshift or yshift:
             self.move(xshift, yshift)
 
+            collisions = pygame.sprite.spritecollide(self._modelsprite, entitymodels, False)
+            
+            for collision in collisions:
+                if collision == self._modelsprite:
+                    pass
+                else:
+                    self.move(-xshift, -yshift)
+
     playerentity._updatestrategy = _playerupdate
 
     input.add_subscriber(lambda message: playerentity.input(message))
