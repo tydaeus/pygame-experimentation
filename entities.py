@@ -13,20 +13,33 @@ class Entity:
         self._modelsprite = sprites.ModelSprite(self, entitymodels)
         self._messages = []
         self._updatestrategy = None
+        # track whether updates have occurred, but ensure first update gets processed
+        self._coordschanged = True
+        self._sizechanged = True
 
     def update(self, *args, **kwargs):
+
         if callable(self._updatestrategy):
             for message in self._messages:
                 self._updatestrategy(self, message)
-        
+
+        if self._coordschanged:
+            self._viewsprite.center = gameenv.scalemodel(*self.center)
+
+        if self._sizechanged:
+            self._viewsprite.size = gameenv.scalemodel(*self.size)
+
         self._messages = []
-        self._viewsprite.rect.center = gameenv.scalemodel(*self.center)
+        self._coordschanged = False
+        self._sizechanged = False
+
 
     def input(self, message):
         self._messages.append(message)
 
     def move(self, xshift, yshift):
         self._modelsprite.rect.move_ip(xshift, yshift)
+        self._coordschanged = True
 
     @property
     def center(self):
@@ -36,6 +49,7 @@ class Entity:
     @center.setter
     def center(self, centerxy):
         self._modelsprite.rect.center = centerxy
+        self._coordschanged = True
 
 
     @property
@@ -46,6 +60,7 @@ class Entity:
     @x.setter
     def x(self, value):
         self._modelsprite.rect.centerx = value
+        self._coordschanged = True
 
 
     @property
@@ -56,6 +71,7 @@ class Entity:
     @y.setter
     def y(self, value):
         self._modelsprite.rect.centery = value
+        self._coordschanged = True
 
 
 
@@ -66,7 +82,10 @@ class Entity:
 
     @size.setter
     def size(self, value):
+        originalcenter = self._modelsprite.rect.center
         self._modelsprite.rect.size = value
+        self._modelsprite.rect.center = originalcenter
+        self._sizechanged = True
 
 
     @property
@@ -76,7 +95,10 @@ class Entity:
 
     @width.setter
     def width(self, value):
+        centerx = self._modelsprite.rect.centerx
         self._modelsprite.rect.width = value
+        self._modelsprite.rect.centerx = centerx
+        self._sizechanged = True
     
 
     @property
@@ -86,7 +108,10 @@ class Entity:
 
     @height.setter
     def height(self, value):
+        centery = self._modelsprite.rect.centery
         self._modelsprite.rect.height = value
+        self._modelsprite.rect.centery = centery
+        self._sizechanged = True
 
 
 
@@ -103,7 +128,8 @@ def init():
 
     playerentity._viewsprite.set_image_identifier('test')
 
-    playerentity.center = (1200, 1200)
+    playerentity.size = 1000, 1000
+    playerentity.center = 1200, 1200
 
     def _playerupdate(self, message):
         xshift = yshift = 0
@@ -129,3 +155,4 @@ def init():
     blockentity._viewsprite.set_image_identifier('block')
 
     blockentity.center = 5000, 5000
+    blockentity.size = 1000, 1000

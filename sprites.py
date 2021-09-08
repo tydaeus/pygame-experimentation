@@ -12,19 +12,34 @@ class ViewSprite(pygame.sprite.Sprite):
 
         self._image_identifier = None
         self.image = None
-        self._pxsize = 100, 100
+        self.originalimage = None
 
     def set_image_identifier(self, identifier):
         if self._image_identifier != identifier:
             self._image_identifier = identifier
-            self.image = image_loader.load_image(identifier)
-            self.rect.size = self.image.get_width(), self.image.get_height()
-            self._scale_image()
+            self.originalimage = image_loader.load_image(identifier)
+            self.image = self.originalimage
 
-    def _scale_image(self):
-        if (self.image.get_width(), self.image.get_height()) != self._pxsize:
-            self.image = pygame.transform.scale(self.image, self._pxsize)
+    @property
+    def center(self):
+        return self.rect.center
 
+    @center.setter
+    def center(self, centerxy):
+        self.rect.center = centerxy
+
+    @property
+    def size(self):
+        return self.rect.size
+
+    @size.setter
+    def size(self, value):
+        # preserve original center, otherwise re-size moves away from it
+        originalcenter = self.rect.center
+        if tuple(value) != tuple(self.rect.size):
+            self.rect.size = value
+            self.rect.center = originalcenter
+            self.image = pygame.transform.scale(self.originalimage, self.rect.size)
 
 class ModelSprite(pygame.sprite.Sprite):
     """
