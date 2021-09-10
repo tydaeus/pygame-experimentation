@@ -17,6 +17,7 @@ class Entity:
         # track whether updates have occurred
         self._lastcenter = (0,0)
         self._lastsize = (0,0)
+        self._speed = 10
 
     def update(self, *args, **kwargs):
 
@@ -165,13 +166,13 @@ def init():
         xshift = yshift = 0
 
         if message.move_north:
-            yshift += -10
+            yshift += -self._speed
         if message.move_east:
-            xshift += 10
+            xshift += self._speed
         if message.move_south:
-            yshift += 10
+            yshift += self._speed
         if message.move_west:
-            xshift += -10
+            xshift += -self._speed
 
         if xshift or yshift:
             if self.can_move(xshift, yshift):
