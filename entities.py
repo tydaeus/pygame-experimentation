@@ -1,4 +1,4 @@
-import pygame, sprites, input, gameenv, math
+import pygame, sprites, input, gameenv
 
 class Entity:
     """
@@ -9,6 +9,7 @@ class Entity:
     """
 
     def __init__(self):
+        # Future: support multiple views
         self._viewsprite = sprites.ViewSprite(entityviews)
         self._modelsprite = sprites.ModelSprite(self, entitymodels)
         self._messages = []
@@ -45,6 +46,7 @@ class Entity:
             """
             Returns whether the proposed move can be performed.
             """
+            # Future: handle cases where a partial move can be performed
 
             # do a bit of swapping so that we can check the destination without forcing a move
             target_position = self._modelsprite.rect.move(xshift, yshift)
