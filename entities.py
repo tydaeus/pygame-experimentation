@@ -140,6 +140,16 @@ class Entity:
         self._sizechanged = True
 
 
+    @property
+    def imageid(self):
+        'Determines image(set) used to render the view.'
+        return self._viewsprite._image_identifier
+
+    @imageid.setter
+    def imageid(self, value):
+        self._viewsprite.imageid = value
+
+
 
 
 def init():
@@ -151,9 +161,7 @@ def init():
 
     # set up player
     playerentity = Entity()
-
-    playerentity._viewsprite.set_image_identifier('test')
-
+    playerentity.imageid = 'test'
     playerentity.size = 1000, 1000
     playerentity.center = 1200, 1200
 
@@ -179,7 +187,6 @@ def init():
 
     # set up block
     blockentity = Entity()
-    blockentity._viewsprite.set_image_identifier('block')
-
+    blockentity.imageid = 'block'
     blockentity.center = 5000, 5000
     blockentity.size = 1000, 1000

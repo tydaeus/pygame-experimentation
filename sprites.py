@@ -14,11 +14,19 @@ class ViewSprite(pygame.sprite.Sprite):
         self.image = None
         self.originalimage = None
 
-    def set_image_identifier(self, identifier):
-        if self._image_identifier != identifier:
-            self._image_identifier = identifier
-            self.originalimage = image_loader.load_image(identifier)
+
+    @property
+    def imageid(self):
+        'Identifier used to load and render the view.'
+        return self._image_identifier
+
+    @imageid.setter
+    def imageid(self, value):
+        if self._image_identifier != value:
+            self._image_identifier = value
+            self.originalimage = image_loader.load_image(value)
             self.image = self.originalimage
+
 
     @property
     def center(self):
