@@ -41,6 +41,32 @@ class Entity:
         self._modelsprite.rect.move_ip(xshift, yshift)
         self._coordschanged = True
 
+    def can_move(self, xshift, yshift):
+            """
+            Returns whether the proposed move can be performed.
+            """
+
+            # do a bit of swapping so that we can check the destination without forcing a move
+            target_position = self._modelsprite.rect.move(xshift, yshift)
+            original_position = self._modelsprite.rect
+            self._modelsprite.rect = target_position
+
+            collisions = pygame.sprite.spritecollide(self._modelsprite, entitymodels, False)
+
+            movable = True
+            
+            for collision in collisions:
+                if collision == self._modelsprite:
+                    pass
+                else:
+                    movable = False
+                    break
+            
+            self._modelsprite.rect = original_position
+
+            return movable
+
+
     @property
     def center(self):
         'The center of the model rect.'
@@ -144,15 +170,8 @@ def init():
             xshift += -10
 
         if xshift or yshift:
-            self.move(xshift, yshift)
-
-            collisions = pygame.sprite.spritecollide(self._modelsprite, entitymodels, False)
-            
-            for collision in collisions:
-                if collision == self._modelsprite:
-                    pass
-                else:
-                    self.move(-xshift, -yshift)
+            if self.can_move(xshift, yshift):
+                self.move(xshift, yshift)
 
     playerentity._updatestrategy = _playerupdate
 
