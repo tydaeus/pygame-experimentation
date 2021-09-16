@@ -43,6 +43,45 @@ class Entity:
     def move(self, xshift, yshift):
         self._modelsprite.rect.move_ip(xshift, yshift)
 
+    def how_traversible(self, xshift, yshift):
+        """
+        Returns how much of the desired move can be performed, including by sliding.
+        """
+
+        result_x = result_y = 0
+        # incrementers
+        ix = iy = 0
+
+        if xshift < 0: ix = -1
+        elif xshift > 0: ix = 1
+
+        if yshift < 0: iy = -1
+        elif yshift > 0: iy = 1
+
+        while abs(xshift) > 0 or abs(yshift) > 0:
+            attemptx = ix if xshift else 0
+            attempty = iy if yshift else 0
+
+            # always decrement
+            xshift -= ix
+            yshift -= iy
+
+            # try moving diagonally (if applicable) first
+            if self.can_move(result_x + attemptx, result_y + attempty):
+                result_x += attemptx
+                result_y += attempty
+            # fallback to orthogonal movement
+            else:
+                if attemptx and self.can_move(result_x + attemptx, 0):
+                    result_x += attemptx
+                elif attempty and self.can_move(0, result_y + attempty):
+                    result_y += attempty
+                else:
+                    break
+        
+        return result_x, result_y
+
+
     def can_move(self, xshift, yshift):
             """
             Returns whether the proposed move can be performed.
@@ -202,8 +241,9 @@ def init():
             raise ValueError(f"Invalid heading:{message.heading}")
 
         if xshift or yshift:
-            if self.can_move(xshift, yshift):
-                self.move(xshift, yshift)
+            xactual, yactual = self.how_traversible(xshift, yshift)
+            if xactual or yactual:
+                self.move(xactual, yactual)
 
     playerentity._updatestrategy = _playerupdate
 
@@ -212,5 +252,5 @@ def init():
     # set up block
     blockentity = Entity()
     blockentity.imageid = 'block'
-    blockentity.center = 5000, 5000
+    blockentity.center = 2500, 2500
     blockentity.size = 1000, 1000
