@@ -1,4 +1,4 @@
-import pygame
+import pygame, math
 
 _MOVE_NORTH =   0b1000
 _MOVE_EAST  =   0b0100
@@ -18,15 +18,77 @@ class InputMessage:
     Represents user input targeted to a specific player character
     """
 
-    """
-    Direction the move was made in, where 0 is up, 90 is right, etc.
-    """
-    heading = 0
+    def __init__(self, heading, magnitude):
+        self.heading = Heading(heading)
+        self.magnitude = magnitude
 
-    """
-    How forcefully the move was made, 0 to 1 (float).
-    """
-    magnitude = 0
+
+# pre-calculate coordinate distance for a 45 degree diagonal, to reduce calculations needed
+_DIAG_DIST = math.sin((45 * math.pi) / 180)
+
+class Heading:
+    def __init__(self, degrees):
+        self.heading = degrees % 360
+
+    @property
+    def heading(self):
+        'Directional heading, in degrees, where 0 is up, 90 is right, etc.'
+        return self._degrees
+
+    @heading.setter
+    def heading(self, value):
+        self._degrees = value % 360
+
+    @property
+    def coordinate_direction_precise(self):
+        """
+        Directional heading in terms of where a 1-unit move in that direction would end up.
+        """
+
+        angle = (self._degrees * math.pi) / 180
+
+        return math.cos(angle), math.sin(angle)
+
+    @property
+    def coordinate_direction(self):
+        """
+        Directional heading in terms of where a 1-unit move in that direction would end up, supporting only 8-way
+        movement.
+        """
+
+        xcoord = ycoord = 0
+
+        # moving north
+        if self._degrees > 337 or self._degrees <= 22:
+            ycoord = -1
+        # northeast
+        elif self._degrees > 22 and self._degrees <= 67:
+            ycoord = -_DIAG_DIST
+            xcoord = _DIAG_DIST
+        # east
+        elif self._degrees > 67 and self._degrees <= 112:
+            xcoord = 1
+        # southeast
+        elif self._degrees > 112 and self._degrees <= 157:
+            xcoord = ycoord = _DIAG_DIST
+        # south
+        elif self._degrees > 157 and self._degrees <= 202:
+            ycoord = 1
+        # southwest
+        elif self._degrees > 202 and self._degrees <= 247:
+            ycoord = _DIAG_DIST
+            xcoord = -_DIAG_DIST
+        # west
+        elif self._degrees > 247 and self._degrees <= 292:
+            xcoord = -1
+        # northwest
+        elif self._degrees > 292 and self._degrees <= 337:
+            xcoord = ycoord = -_DIAG_DIST
+        # impossible
+        else:
+            raise ValueError(f"Invalid heading:{self._degrees}")
+
+        return xcoord, ycoord
 
 _subscribers = []
 
@@ -52,43 +114,41 @@ def _read_heading(inputs):
     elif inputs & _MOVE_EAST and inputs & _MOVE_WEST:
         return None
 
-    event_message = InputMessage()
-
     # working from keyboard input, we'll always have magnitude 1 if valid move input present
-    event_message.magnitude = 1
+    magnitude = 1
 
     if inputs & _MOVE_NORTH:
         # northeast
         if inputs & _MOVE_EAST:
-            event_message.heading = 45
+            heading = 45
         # northwest
         elif inputs & _MOVE_WEST:
-            event_message.heading = 315
+            heading = 315
         # north
         else:
-            event_message.heading = 0
+            heading = 0
     elif inputs & _MOVE_SOUTH:
         # southeast
         if inputs & _MOVE_EAST:
-            event_message.heading = 135
+            heading = 135
         # southwest
         elif inputs &_MOVE_WEST:
-            event_message.heading = 225
+            heading = 225
         # south
         else:
-            event_message.heading = 180
+            heading = 180
     # east
     elif inputs & _MOVE_EAST:
-        event_message.heading = 90
+        heading = 90
     # west
     elif inputs & _MOVE_WEST:
-        event_message.heading = 270
+        heading = 270
     # something went wrong
     else:
         # make it obvious if we got something unexpected by this point
         raise ValueError(f"Unable to parse input: {inputs:04b}")
     
-    return event_message
+    return InputMessage(heading, magnitude)
 
 
 def update():

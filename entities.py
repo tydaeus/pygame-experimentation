@@ -206,39 +206,12 @@ def init():
 
         if message.magnitude <= 0:
             return
-        
-        # if moving diagonally, this provides a reasonable approximation of correct shift
-        diag_speed = int(0.7 * self._speed)
 
-        # moving north
-        if message.heading > 337 or message.heading <= 22:
-            yshift = -self._speed
-        # northeast
-        elif message.heading > 22 and message.heading <= 67:
-            yshift = -diag_speed
-            xshift = diag_speed
-        # east
-        elif message.heading > 67 and message.heading <= 112:
-            xshift = self._speed
-        # southeast
-        elif message.heading > 112 and message.heading <= 157:
-            xshift = yshift = diag_speed
-        # south
-        elif message.heading > 157 and message.heading <= 202:
-            yshift = self._speed
-        # southwest
-        elif message.heading > 202 and message.heading <= 247:
-            yshift = diag_speed
-            xshift = -diag_speed
-        # west
-        elif message.heading > 247 and message.heading <= 292:
-            xshift = -self._speed
-        # northwest
-        elif message.heading > 292 and message.heading <= 337:
-            xshift = yshift = -diag_speed
-        # impossible
-        else:
-            raise ValueError(f"Invalid heading:{message.heading}")
+        magnitude_speed = message.magnitude * self._speed
+
+        xshift, yshift = message.heading.coordinate_direction
+        xshift = int(xshift * magnitude_speed)
+        yshift = int(yshift * magnitude_speed)
 
         if xshift or yshift:
             xactual, yactual = self.how_traversible(xshift, yshift)
