@@ -1,4 +1,4 @@
-import pygame, image_loader
+import pygame, image_loader, gameenv
 
 
 class ViewSprite(pygame.sprite.Sprite):
@@ -14,6 +14,10 @@ class ViewSprite(pygame.sprite.Sprite):
         self.image = None
         self.originalimage = None
 
+    def update(self, entity, *args):
+        self.imageid = entity.imageid
+        self.center = gameenv.scalemodel(*entity.center)
+        self.size = gameenv.scalemodel(*entity.size)
 
     @property
     def imageid(self):

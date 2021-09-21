@@ -14,10 +14,12 @@ class Entity:
         self._modelsprite = sprites.ModelSprite(self, entitymodels)
         self._messages = []
         self._updatestrategy = None
+        self._imageid = None
         # track whether updates have occurred
         self._lastcenter = (0,0)
         self._lastsize = (0,0)
         self._speed = 10
+        self._lastimageid = None
 
     def update(self, *args, **kwargs):
 
@@ -25,11 +27,11 @@ class Entity:
             for message in self._messages:
                 self._updatestrategy(self, message)
 
-        if tuple(self.center) != self._lastcenter:
-            self._viewsprite.center = gameenv.scalemodel(*self.center)
+        if tuple(self.center) != self._lastcenter or \
+            tuple(self.size) != tuple(self._lastsize) or \
+            self.imageid != self._lastimageid:
 
-        if tuple(self.size) != self._lastsize:
-            self._viewsprite.size = gameenv.scalemodel(*self.size)
+            self._viewsprite.update(self)
 
         self._messages = []
 
@@ -179,11 +181,11 @@ class Entity:
     @property
     def imageid(self):
         'Determines image(set) used to render the view.'
-        return self._viewsprite._image_identifier
+        return self._imageid
 
     @imageid.setter
     def imageid(self, value):
-        self._viewsprite.imageid = value
+        self._imageid = value
 
 
 

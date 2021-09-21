@@ -29,6 +29,7 @@ def draw_background():
 
 draw_background()
 entities.init()
+entities.entitymodels.update()
 entities.entityviews.draw(screen)
 
 # loop
