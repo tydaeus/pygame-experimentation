@@ -40,6 +40,22 @@ class Heading:
         self._degrees = value % 360
 
     @property
+    def compass_direction(self):
+        """
+        Directional heading as a 4-way compass reading ('N', 'E', 'S', or 'W')
+        """
+        if self._degrees > 315  or self._degrees <= 45:
+            return 'N'
+        elif self._degrees > 45 or self._degrees <= 135:
+            return 'E'
+        elif self._degrees > 135 or self._degrees <= 225:
+            return 'S'
+        elif self._degrees > 225 or self._degrees <= 315:
+            return 'W'
+        else:
+            raise ValueError(f"Invalid heading:{self._degrees}")
+
+    @property
     def coordinate_direction_precise(self):
         """
         Directional heading in terms of where a 1-unit move in that direction would end up.
@@ -89,6 +105,9 @@ class Heading:
             raise ValueError(f"Invalid heading:{self._degrees}")
 
         return xcoord, ycoord
+
+    def __repr__(self):
+        return f"degrees: {self._degrees}"
 
 _subscribers = []
 
