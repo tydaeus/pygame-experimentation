@@ -14,7 +14,8 @@ class Entity:
         self._modelsprite = sprites.ModelSprite(self, entitymodels)
         self._messages = []
         self._updatestrategy = None
-        self._imageid = None
+        self.imageid = None
+        self.heading = None
         # track whether updates have occurred
         self._lastcenter = (0,0)
         self._lastsize = (0,0)
@@ -132,6 +133,15 @@ class Entity:
 
 
     @property
+    def heading(self):
+        return self._heading
+    
+    @heading.setter
+    def heading(self,value):
+        self._heading = value
+
+
+    @property
     def y(self):
         'Y-coordinate of model center.'
         return self._modelsprite.rect.centery
@@ -205,6 +215,9 @@ def init():
 
     def _playerupdate(self, message):
         xshift = yshift = 0
+
+        if message.heading:
+            self.heading = message.heading
 
         if message.magnitude <= 0:
             return
