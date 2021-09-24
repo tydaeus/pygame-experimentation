@@ -121,15 +121,15 @@ def _convert_color_array_to_surface(color_array):
     del pxarr
     return surface
 
-def load_image(image_identifier):
+def load_image(view):
     """
-    Attempts to find an image matching the specified identifier. Raises a warning if no matching image found.
+    Attempts to find an image matching the provided specifying object.
     """
 
-    if image_identifier in _images.keys():
-        return _convert_color_array_to_surface(_convert_text_image_to_colorarray(_images[image_identifier]))
+    if view.imageid in _images.keys():
+        return _convert_color_array_to_surface(_convert_text_image_to_colorarray(_images[view.imageid]))
     else:
-        raise UserWarning(f"Image matching '{image_identifier}' not found.")
+        raise UserWarning(f"Image matching '{view}' not found.")
 
 
 _images = {

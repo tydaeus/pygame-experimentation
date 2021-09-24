@@ -28,7 +28,7 @@ class ViewSprite(pygame.sprite.Sprite):
     def imageid(self, value):
         if self._image_identifier != value:
             self._image_identifier = value
-            self.originalimage = image_loader.load_image(value)
+            self.originalimage = image_loader.load_image(self)
             self.image = self.originalimage
 
 
