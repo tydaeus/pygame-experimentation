@@ -46,11 +46,11 @@ class Heading:
         """
         if self._degrees > 315  or self._degrees <= 45:
             return 'N'
-        elif self._degrees > 45 or self._degrees <= 135:
+        elif self._degrees > 45 and self._degrees <= 135:
             return 'E'
-        elif self._degrees > 135 or self._degrees <= 225:
+        elif self._degrees > 135 and self._degrees <= 225:
             return 'S'
-        elif self._degrees > 225 or self._degrees <= 315:
+        elif self._degrees > 225 and self._degrees <= 315:
             return 'W'
         else:
             raise ValueError(f"Invalid heading:{self._degrees}")
