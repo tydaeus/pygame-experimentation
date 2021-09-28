@@ -126,8 +126,17 @@ def load_image(view):
     Attempts to find an image matching the provided specifying object.
     """
 
+    # FUTURE: cache previously loaded images
+    # FUTURE: provide a standardized definition of what the view will be examined for
+
     if view.imageid in _images.keys():
-        return _convert_color_array_to_surface(_convert_text_image_to_colorarray(_images[view.imageid]))
+        baseimage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(_images[view.imageid]))
+        resultimage = baseimage
+
+        if tuple(baseimage.get_size()) != tuple(view.size):
+            resultimage = pygame.transform.scale(baseimage, view.size)
+        
+        return resultimage
     else:
         raise UserWarning(f"Image matching '{view}' not found.")
 
