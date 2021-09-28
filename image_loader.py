@@ -130,19 +130,59 @@ def load_image(view):
     # FUTURE: provide a standardized definition of what the view will be examined for
 
     if view.imageid in _images.keys():
-        baseimage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(_images[view.imageid]))
+        imageentry = _images[view.imageid]
+        # FUTURE: extract, allow multi-frame or otherwise more complex images
+        if type(imageentry) == dict:
+            textimage = imageentry['base']
+        else:
+            textimage = imageentry
+
+        baseimage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(textimage))
         resultimage = baseimage
 
-        if tuple(baseimage.get_size()) != tuple(view.size):
-            resultimage = pygame.transform.scale(baseimage, view.size)
+        # FUTURE: simplify, extract
+        if view.heading:
+            compassdir = view.heading.compass_direction
+            headingkey = f"heading{compassdir}"
+            if headingkey in imageentry.keys():
+                headingval = imageentry[headingkey]
+                if callable(headingval):
+                    resultimage = headingval(resultimage)
+                else:
+                    raise UserWarning("headingval not callable")
+            else:
+                raise UserWarning("heading specified, but not allowed")
+                
+
+        if tuple(resultimage.get_size()) != tuple(view.size):
+            resultimage = pygame.transform.scale(resultimage, view.size)
         
         return resultimage
     else:
         raise UserWarning(f"Image matching '{view}' not found.")
 
+def _build_rotate_fn(degrees:int): 
+
+
+    def _noop_fn(image:pygame.Surface):
+        return image
+
+    def _rotate_fn(image:pygame.Surface):
+        return pygame.transform.rotate(image, -degrees)
+
+    if degrees == 0:
+        return _noop_fn
+    else:
+        return _rotate_fn
+
+rotate0 = _build_rotate_fn(0)
+rotate90 = _build_rotate_fn(90)
+rotate180 = _build_rotate_fn(180)
+rotate270 = _build_rotate_fn(270)
 
 _images = {
-    'test' :
+    'test' : {
+        'base' :
 """
 +-----------------------+
 |  ███████████████████  |
@@ -170,6 +210,11 @@ _images = {
 |  ███████████████████  |
 +-----------------------+
 """,
+        "headingE": rotate0,
+        "headingS": rotate90,
+        "headingW": rotate180,
+        "headingN": rotate270
+    },
     'block' :
 """
 +-----------------------+

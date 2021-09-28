@@ -12,6 +12,7 @@ class ViewSprite(pygame.sprite.Sprite):
 
         self._image_identifier = None
         self._changed = False
+        self._heading = None
         self.image = None
         self.originalimage = None
 
@@ -19,6 +20,7 @@ class ViewSprite(pygame.sprite.Sprite):
         self.imageid = entity.imageid
         self.center = gameenv.scalemodel(*entity.center)
         self.size = gameenv.scalemodel(*entity.size)
+        self.heading = entity.heading
 
         if self._changed:
             self.reload_image()
@@ -58,13 +60,23 @@ class ViewSprite(pygame.sprite.Sprite):
     def size(self, value):
         if tuple(self.rect.size) != tuple(value):
             # preserve original center, otherwise a change in size moves away from it
-        originalcenter = self.rect.center
+            originalcenter = self.rect.center
             self.rect.size = value
             self.rect.center = originalcenter
 
             self._changed = True
 
     
+    @property
+    def heading(self):
+        return self._heading
+
+    @heading.setter
+    def heading(self, value):
+        if self._heading != value:
+            self._heading = value
+            self._changed = True
+
 
 class ModelSprite(pygame.sprite.Sprite):
     """
