@@ -1,7 +1,7 @@
 """
 Takes care of finding and loading images needed for the game.
 """
-import pygame
+import pygame, imagedef
 
 
 class _TextImageParser:
@@ -129,8 +129,8 @@ def load_image(view):
     # FUTURE: cache previously loaded images
     # FUTURE: provide a standardized definition of what the view will be examined for
 
-    if view.imageid in _images.keys():
-        imageentry = _images[view.imageid]
+    if view.imageid in imagedef._images.keys():
+        imageentry = imagedef._images[view.imageid]
         # FUTURE: extract, allow multi-frame or otherwise more complex images
         if type(imageentry) == dict:
             textimage = imageentry['base']
@@ -161,87 +161,5 @@ def load_image(view):
     else:
         raise UserWarning(f"Image matching '{view}' not found.")
 
-def _build_rotate_fn(degrees:int): 
 
-
-    def _noop_fn(image:pygame.Surface):
-        return image
-
-    def _rotate_fn(image:pygame.Surface):
-        return pygame.transform.rotate(image, -degrees)
-
-    if degrees == 0:
-        return _noop_fn
-    else:
-        return _rotate_fn
-
-rotate0 = _build_rotate_fn(0)
-rotate90 = _build_rotate_fn(90)
-rotate180 = _build_rotate_fn(180)
-rotate270 = _build_rotate_fn(270)
-
-_images = {
-    'test' : {
-        'base' :
-"""
-+-----------------------+
-|  ███████████████████  |
-| █⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█ |
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷█|
-|█⌷███████████████████⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█⌷⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█|
-|█⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█|
-| █⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷⌷█ |
-|  ███████████████████  |
-+-----------------------+
-""",
-        "headingE": rotate0,
-        "headingS": rotate90,
-        "headingW": rotate180,
-        "headingN": rotate270
-    },
-    'block' :
-"""
-+-----------------------+
-|  ███████████████████  |
-| █░░▓▓▓▓▓▓▓▓⌷⌷▓▓▓▓▓░▓█ |
-|█▓▓░▓▓▓▓▓▓▓▓▓⌷▓▓▓▓░░▓▓█|
-|█▓▓▓▓▓▓▓▓▓▓░░▓▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓▓▓▓▓▓░░░▓▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░▓▓█|
-|█▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░▓▓▓▓▓█|
-|█▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░▓▓▓▓▓█|
-|█▓▓⌷▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓⌷⌷⌷█|
-|█▓▓▓⌷▓▓▓▓▓▓▓▓▓▓▓▓▓▓⌷⌷▓█|
-|█▓▓⌷⌷▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓▓▓▓▓▓▓▓░░░▓▓▓▓▓░░█|
-|█▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░█|
-|█▓▓▓▓⌷⌷▓▓▓▓▓▓▓▓▓▓▓▓▓░⌷█|
-|█▓▓▓▓▓⌷⌷▓▓▓▓▓▓▓▓▓▓⌷⌷⌷▓█|
-|█▓▓▓▓▓⌷⌷▓▓▓▓▓▓▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓▓▓▓▓▓░░░░▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓▓▓▓▓▓▓▓░░▓▓▓▓▓▓▓▓█|
-|█▓▓▓▓▓▓▓▓⌷▓▓▓▓▓▓░░░▓▓▓█|
-| █▓▓▓▓▓▓▓⌷⌷▓▓▓▓▓▓░░▓▓█ |
-|  ███████████████████  |
-+-----------------------+
-"""
-}
 
