@@ -1,5 +1,11 @@
 import pygame
 
+def get_imagedef(imageid):
+    if imageid in _images.keys():
+        return _images[imageid]
+    else:
+        raise UserWarning(f"Image matching '{imageid}' not found.")
+
 def _build_rotate_fn(degrees:int): 
 
 

@@ -128,38 +128,34 @@ def load_image(view):
 
     # FUTURE: cache previously loaded images
     # FUTURE: provide a standardized definition of what the view will be examined for
-
-    if view.imageid in imagedef._images.keys():
-        imageentry = imagedef._images[view.imageid]
-        # FUTURE: extract, allow multi-frame or otherwise more complex images
-        if type(imageentry) == dict:
-            textimage = imageentry['base']
-        else:
-            textimage = imageentry
-
-        baseimage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(textimage))
-        resultimage = baseimage
-
-        # FUTURE: simplify, extract
-        if view.heading:
-            compassdir = view.heading.compass_direction
-            headingkey = f"heading{compassdir}"
-            if headingkey in imageentry.keys():
-                headingval = imageentry[headingkey]
-                if callable(headingval):
-                    resultimage = headingval(resultimage)
-                else:
-                    raise UserWarning("headingval not callable")
-            else:
-                raise UserWarning("heading specified, but not allowed")
-                
-
-        if tuple(resultimage.get_size()) != tuple(view.size):
-            resultimage = pygame.transform.scale(resultimage, view.size)
-        
-        return resultimage
+    imageentry = imagedef.get_imagedef(view.imageid)
+    # FUTURE: allow multi-frame or otherwise more complex images
+    if type(imageentry) == dict:
+        textimage = imageentry['base']
     else:
-        raise UserWarning(f"Image matching '{view}' not found.")
+        textimage = imageentry
+
+    baseimage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(textimage))
+    resultimage = baseimage
+
+    # FUTURE: simplify, extract
+    if view.heading:
+        compassdir = view.heading.compass_direction
+        headingkey = f"heading{compassdir}"
+        if headingkey in imageentry.keys():
+            headingval = imageentry[headingkey]
+            if callable(headingval):
+                resultimage = headingval(resultimage)
+            else:
+                raise UserWarning("headingval not callable")
+        else:
+            raise UserWarning("heading specified, but not allowed")
+            
+
+    if tuple(resultimage.get_size()) != tuple(view.size):
+        resultimage = pygame.transform.scale(resultimage, view.size)
+    
+    return resultimage
 
 
 
