@@ -25,9 +25,10 @@ rotate90 = _build_rotate_fn(90)
 rotate180 = _build_rotate_fn(180)
 rotate270 = _build_rotate_fn(270)
 
-_images = {
-    'test' : {
-        'base' :
+_images = {}
+
+_images['test'] = {
+    'base' :
 """
 +-----------------------+
 |  ███████████████████  |
@@ -55,13 +56,13 @@ _images = {
 |  ███████████████████  |
 +-----------------------+
 """,
-        "headingE": rotate0,
-        "headingS": rotate90,
-        "headingW": rotate180,
-        "headingN": rotate270
-    },
-    'block' :
-"""
+    "headingE": rotate0,
+    "headingS": rotate90,
+    "headingW": rotate180,
+    "headingN": rotate270
+}
+
+_images['block'] = """
 +-----------------------+
 |  ███████████████████  |
 | █░░▓▓▓▓▓▓▓▓⌷⌷▓▓▓▓▓░▓█ |
@@ -88,4 +89,3 @@ _images = {
 |  ███████████████████  |
 +-----------------------+
 """
-}
