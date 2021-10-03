@@ -1,12 +1,12 @@
-import sys, pygame, entities
+import sys, pygame
+
+from game_engine import entities, input
 
 try:
     import numpy as np
     import pygame.surfarray as surfarray
 except ImportError:
     raise ImportError("NumPy and Surfarray are required.")
-
-import sprites, input
 
 pygame.init()
 

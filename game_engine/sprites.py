@@ -1,4 +1,5 @@
-import pygame, image_loader, gameenv
+import pygame
+from . import image_loader, gameenv
 
 
 class ViewSprite(pygame.sprite.Sprite):

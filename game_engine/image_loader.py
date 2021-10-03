@@ -1,7 +1,8 @@
 """
 Takes care of finding and loading images needed for the game.
 """
-import pygame, imagedef
+import logging, pygame
+from . import imagedef
 
 
 class _TextImageParser:

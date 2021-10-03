@@ -1,4 +1,5 @@
-import pygame, sprites, input, gameenv
+import pygame
+from . import sprites, input
 
 class Entity:
     """
