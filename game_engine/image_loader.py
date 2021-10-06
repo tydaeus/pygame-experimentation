@@ -4,6 +4,7 @@ Takes care of finding and loading images needed for the game.
 import logging, pygame
 from . import imagedef
 
+_logger = logging.getLogger(__name__)
 
 class _TextImageParser:
     """
@@ -129,6 +130,7 @@ def load_image(view):
 
     # FUTURE: cache previously loaded images
     # FUTURE: provide a standardized definition of what the view will be examined for
+    _logger.debug("Loading image '%s'", view.imageid)
     imageentry = imagedef.get_imagedef(view.imageid)
     # FUTURE: allow multi-frame or otherwise more complex images
     if type(imageentry) == dict:
