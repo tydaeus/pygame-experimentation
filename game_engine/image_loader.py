@@ -31,7 +31,7 @@ class _TextImageParser:
             self.index += 1
 
         if self.state != self._parse_done:
-            raise UserWarning("Malformed text image - parsing incomplete")
+            raise UserWarning(f"Malformed text image - parsing incomplete at {self.index} / {len(text_image)}")
 
         return self.output
 
@@ -150,7 +150,7 @@ def load_image(view):
             if callable(headingval):
                 resultimage = headingval(resultimage)
             else:
-                raise UserWarning("headingval not callable")
+                resultImage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(headingval))
         else:
             raise UserWarning("heading specified, but not allowed")
             
