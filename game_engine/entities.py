@@ -45,6 +45,10 @@ class Entity:
         self._messages.append(message)
 
     def move(self, xshift, yshift):
+        """
+        Moves the model by the specified amount. Use how_traversible and/or can_move first to check whether the move is
+        legal.
+        """
         self._modelsprite.rect.move_ip(xshift, yshift)
 
     def how_traversible(self, xshift, yshift):
@@ -90,7 +94,6 @@ class Entity:
             """
             Returns whether the proposed move can be performed.
             """
-            # Future: handle cases where a partial move can be performed
 
             # do a bit of swapping so that we can check the destination without forcing a move
             target_position = self._modelsprite.rect.move(xshift, yshift)
