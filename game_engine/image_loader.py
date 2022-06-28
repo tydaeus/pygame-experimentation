@@ -123,6 +123,10 @@ def _convert_color_array_to_surface(color_array):
     del pxarr
     return surface
 
+def _convert_text_image_to_surface(text_image, text_palette=_default_text_palette):
+    return _convert_color_array_to_surface(_convert_text_image_to_colorarray(text_image, text_palette))
+
+
 def load_image(view):
     """
     Attempts to find an image matching the provided specifying object.
@@ -138,7 +142,7 @@ def load_image(view):
     else:
         textimage = imageentry
 
-    baseimage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(textimage))
+    baseimage = _convert_text_image_to_surface(textimage)
     resultimage = baseimage
 
     # FUTURE: simplify, extract
@@ -150,7 +154,7 @@ def load_image(view):
             if callable(headingval):
                 resultimage = headingval(resultimage)
             else:
-                resultimage = _convert_color_array_to_surface(_convert_text_image_to_colorarray(headingval))
+                resultimage = _convert_text_image_to_surface(headingval)
         else:
             raise UserWarning("heading specified, but not allowed")
             
