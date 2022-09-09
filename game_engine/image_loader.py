@@ -30,9 +30,6 @@ def load_image(view):
         headingkey = f"heading{compassdir}"
         if headingkey in imageentry.keys():
             headingval = imageentry[headingkey]
-            if callable(headingval):
-                resultimage = headingval(resultimage)
-            else:
                 resultimage = textimage_loader._convert_text_image_to_surface(headingval)
         else:
             raise UserWarning("heading specified, but not allowed")
