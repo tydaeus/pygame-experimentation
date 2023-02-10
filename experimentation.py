@@ -23,8 +23,12 @@ white = 255, 255, 255
 def draw_background():
     screen.fill(white)
 
+    # make our background slightly more interesting by drawing a black square onto it
+    # get a 128 x 128 x 3 int32 array of 0s
     squareArr = np.zeros((128, 128, 3), np.int32)
+    # create a surface from the square array
     squareSurface = surfarray.make_surface(squareArr)
+    # blit the whole squareSurface onto the screen surface
     screen.blit(squareSurface, squareSurface.get_rect())
 
 draw_background()
