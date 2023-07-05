@@ -41,4 +41,42 @@ def load_image(view):
     return resultimage
 
 
+"""
+Planning
+Need to separate concerns a bit further
+
+Loader (rename?)
+should take care of reading the files and providing easy access to the different images necessary to render
+needs a way to consistently describe the different images
+- heading for each image variant
+- state (running, idle, etc.) for each image variant
+    - frames applicable to state
+- modifiers?
+- component images?
+
+Entity model
+tracks entity's current state
+- heading
+- state
+    - agnostic to current frame
+    - knows how long has been in current state
+        - maximum length of tracking followed by rollover, or transition to another state
+            - likely not useful to track indefinitely, at least not here, but could technically do so
+        - conventions? e.g. rollover, or transition between states may need divisibility to prevent stutter
+            - 60 ticks or 1s could be reasonable, maybe not if engine allows adjustable clock freq
+- modifiers
+
+Translator (rename? ImageProvider, ImageSelector)
+reads Entity's current state and available options from loader to determine what should actually get rendered
+
+ImageSource - defines where to pull one or more associated images from
+ImageDef - groups one or more related ImageSources together to gather all (or just multiple?) images for a given entity
+ImageLoader - used to convert images defined by ImageDef into pygame surfaces - where to cache? store in imageDef or imageProvider, or as part of loading? likely should cache initial surface load
+
+who controls frame rate (ticks/frame)?
+- entity should know how long a given state lasts (or if it is indefinite/player controlled, and whether interruptable)
+- Loader should know how many frames there are for a given state
+- who knows whether a given sequence should loop indefinitely vs. get padded?
+
+"""
 
