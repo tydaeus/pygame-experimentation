@@ -2,7 +2,7 @@
 mechanisms to load a textimage from file (currently imagedef.py)
 """
 
-import logging, pygame
+import logging, pygame, re
 from . import imagedef
 
 _logger = logging.getLogger(__name__)
@@ -126,3 +126,36 @@ def _convert_color_array_to_surface(color_array):
 
 def _convert_text_image_to_surface(text_image, text_palette=_default_text_palette):
     return _convert_color_array_to_surface(_convert_text_image_to_colorarray(text_image, text_palette))
+
+def _read_text_image_file(filepath):
+    """
+    Reads a text file containing one or more text images.
+    Returns a list of strings, one for each text image.
+    """
+
+    with open(filepath, encoding='utf8') as fp:
+        rawcontents = fp.readlines()
+
+    output = []
+    curimage = ''
+    reading = False
+    re_textframe = re.compile(r'^\+-+\+$')
+
+    for line in rawcontents:
+        if re_textframe.match(line):
+            # frame edges are always part of the image
+            curimage += line
+
+            # bottom of frame
+            if reading:
+                output.append(curimage)
+                curimage = ''
+                reading = False
+            # top of frame
+            else:
+                reading = True
+        elif reading:
+                curimage += line
+    
+    return output
+# TODO: parse output
