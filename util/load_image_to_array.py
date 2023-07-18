@@ -20,10 +20,9 @@ def load_image_to_array(imagepath):
     rawsurfarray = surfarray.array2d(img)
     processedsurfarray = []
 
-    # TODO: figure out how to properly copy 2d array to lists (or array)
     for i in range(len(rawsurfarray)):
-        processedsurfarray[i].append([])
+        processedsurfarray.append([])
         for j in range(len(rawsurfarray[i])):
-            processedsurfarray[i][j] = img.unmap_rgb(rawsurfarray[i][j])
+            processedsurfarray[i].append(img.unmap_rgb(rawsurfarray[i][j]))
 
     return processedsurfarray
